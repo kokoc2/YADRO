@@ -4,18 +4,25 @@ const EditModal = ({ seminar, onClose, onSave }) => {
   const [editedData, setEditedData] = useState({ ...seminar });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEditedData((prev) => ({ ...prev, [name]: value }));
+    setEditedData({
+      ...setEditedData,
+      [name]: value,
+    });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError("");
-
+    const errors = validateForm(editedData);
+    if (Object.keys(errors).length > 0) {
+      setError("Пожалуйста, исправьте ошибки в форме.");
+      setLoading(false);
+      return; // Прерываем выполнение, если есть ошибки
+    }
     try {
       const response = await fetch(
         `https://67aca4193f5a4e1477db5202.mockapi.io/YADRO/${seminar.id}`,
@@ -44,48 +51,30 @@ const EditModal = ({ seminar, onClose, onSave }) => {
     }
   };
 
-  const validateForm = () => {
-    const newErrors = {};
+  const validateForm = (editedData) => {
+    const errors = {};
 
     // Валидация названия
-    if (!editedData.title) {
-      newErrors.title = "Название обязательно1111111111111111111111111111";
+    if (editedData.title === "") {
+      errors.title = "Название обязательно";
     }
 
     // Валидация описания
-    if (!editedData.description) {
-      newErrors.description = "Описание обязательно";
+    if (editedData.description === "") {
+      errors.description = "Описание обязательно";
     }
-
     // Валидация количества
-    if (isNaN(editedData.count) || editedData.count <= 0) {
-      newErrors.count = "Количество должно быть числом больше нуля";
+    if (editedData.count <= 0 || editedData.count == "") {
+      errors.count = "Количество должно быть числом больше нуля";
     }
 
     // Валидация отзывов
-    if (isNaN(editedData.reviews) || editedData.reviews < 0) {
-      newErrors.reviews =
-        "Количество отзывов должно быть неотрицательным числом";
+    if (editedData.reviews < 0) {
+      errors.reviews = "Количество отзывов должно быть неотрицательным числом";
     }
-
-    // Валидация URL картинки
-    /*     const urlPattern =
-      /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
-    if (!editedData.imageUrl || !urlPattern.test(editedData.imageUrl)) {
-      newErrors.imageUrl = "Введите корректный URL";
-    } */
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Возвращает true, если ошибок нет
+    return errors;
   };
 
-  /*  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validateForm()) {
-      onSave(editedData); // Сохраняем данные, если валидация прошла успешно
-      onClose(); // Закрываем модальное окно
-    }
-  }; */
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -100,9 +89,8 @@ const EditModal = ({ seminar, onClose, onSave }) => {
               onChange={handleChange}
               required
             />
-            {errors.title && <span className="error">{errors.title}</span>}
+            {error.title && <span className="error">{error.title}</span>}
           </div>
-
           <div className="form-group">
             <label>Описание:</label>
             <textarea
@@ -112,7 +100,6 @@ const EditModal = ({ seminar, onClose, onSave }) => {
               required
             />
           </div>
-
           <div className="form-row">
             <div className="form-group">
               <label>Количество:</label>
@@ -137,19 +124,7 @@ const EditModal = ({ seminar, onClose, onSave }) => {
             </div>
           </div>
 
-          <div className="form-group">
-            <label>URL фото:</label>
-            <input
-              type="url"
-              name="photo"
-              value={editedData.photo}
-              onChange={handleChange}
-              required
-            />
-          </div>
-
           {error && <div className="error-message">{error}</div>}
-
           <div className="modal-buttons">
             <button
               type="button"
@@ -159,7 +134,7 @@ const EditModal = ({ seminar, onClose, onSave }) => {
             >
               Отмена
             </button>
-            <button type="submit" className="save-button" disabled={loading}>
+            <button className="save-button" disabled={loading}>
               {loading ? "Сохранение..." : "Сохранить"}
             </button>
           </div>
