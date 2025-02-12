@@ -4,6 +4,7 @@ const EditModal = ({ seminar, onClose, onSave }) => {
   const [editedData, setEditedData] = useState({ ...seminar });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,7 +18,7 @@ const EditModal = ({ seminar, onClose, onSave }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:3001/seminars/${seminar.id}`,
+        `https://67aca4193f5a4e1477db5202.mockapi.io/YADRO/${seminar.id}`,
         {
           method: "PUT", // Используем PUT для обновления
           headers: {
@@ -43,6 +44,48 @@ const EditModal = ({ seminar, onClose, onSave }) => {
     }
   };
 
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Валидация названия
+    if (!editedData.title) {
+      newErrors.title = "Название обязательно1111111111111111111111111111";
+    }
+
+    // Валидация описания
+    if (!editedData.description) {
+      newErrors.description = "Описание обязательно";
+    }
+
+    // Валидация количества
+    if (isNaN(editedData.count) || editedData.count <= 0) {
+      newErrors.count = "Количество должно быть числом больше нуля";
+    }
+
+    // Валидация отзывов
+    if (isNaN(editedData.reviews) || editedData.reviews < 0) {
+      newErrors.reviews =
+        "Количество отзывов должно быть неотрицательным числом";
+    }
+
+    // Валидация URL картинки
+    /*     const urlPattern =
+      /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/;
+    if (!editedData.imageUrl || !urlPattern.test(editedData.imageUrl)) {
+      newErrors.imageUrl = "Введите корректный URL";
+    } */
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // Возвращает true, если ошибок нет
+  };
+
+  /*  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validateForm()) {
+      onSave(editedData); // Сохраняем данные, если валидация прошла успешно
+      onClose(); // Закрываем модальное окно
+    }
+  }; */
   return (
     <div className="modal-overlay">
       <div className="modal-content">
@@ -57,6 +100,7 @@ const EditModal = ({ seminar, onClose, onSave }) => {
               onChange={handleChange}
               required
             />
+            {errors.title && <span className="error">{errors.title}</span>}
           </div>
 
           <div className="form-group">

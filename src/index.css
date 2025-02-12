@@ -1,3 +1,10 @@
+body {
+  background-image: url("https://optim.tildacdn.com/tild6166-6233-4463-b639-363035623230/-/format/webp/background_2.jpg");
+  z-index: 0;
+  font-family: "ProximaNova", Arial, sans-serif;
+  font-weight: 300;
+}
+
 .error-message {
   color: #dc3545;
   padding: 1rem;
@@ -15,6 +22,7 @@
 }
 
 .seminar-card {
+  background-color: white;
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
@@ -132,7 +140,7 @@
 }
 
 .edit-button {
-  background-color: #007bff;
+  background-color: #1e22aa;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -156,4 +164,69 @@
   background-color: #6c757d;
   color: white;
   padding: 8px 20px;
+}
+
+h1 {
+  color: white;
+}
+
+.seminar-details {
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+}
+
+.seminar-details h1 {
+  font-size: 2rem;
+  color: #333;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.seminar-details p,
+h2,
+.path {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 15px;
+  line-height: 1.6;
+}
+
+.seminar-details .name2 {
+  font-size: 1.5rem;
+  color: #1e22aa;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.seminar-details .back-button {
+  display: block;
+  width: 100%;
+  max-width: 200px;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.seminar-details .back-button:hover {
+  background-color: #0056b3;
+}
+.FlexName {
+  display: flex;
+  text-decoration: none;
+}
+.path {
+  text-decoration: none;
 }

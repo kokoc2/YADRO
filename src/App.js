@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import Seminars from "./Seminars.js";
+import Product from "./Product.js";
+import ProductInfo from "./ProductInfo.js";
 function App() {
   return (
-    <div className="App">
-      <h1>Наши продукты</h1>
-      {/* Отрисовываем компонент с семинарами */}
-      <Seminars />
-    </div>
+    <Router>
+      <Routes>
+        {/* Отрисовываем компонент со списком товара*/}
+        <Route path="/" element={<Product />} />
+
+        {/* Страница с деталями семинара */}
+        <Route path="/Подробнее/:id" element={<ProductInfo />} />
+      </Routes>
+    </Router>
   );
 }
 export default App;
