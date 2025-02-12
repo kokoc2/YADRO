@@ -4,6 +4,7 @@ const EditModal = ({ seminar, onClose, onSave }) => {
   const [editedData, setEditedData] = useState({ ...seminar });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,22 +57,23 @@ const EditModal = ({ seminar, onClose, onSave }) => {
 
     // Валидация названия
     if (editedData.title === "") {
-      errors.title = "Название обязательно";
+      errors.title = "Введите название";
     }
 
     // Валидация описания
     if (editedData.description === "") {
-      errors.description = "Описание обязательно";
+      errors.description = "Введите описание";
     }
-    // Валидация количества
+    // Валидация количества проданного товара
     if (editedData.count <= 0 || editedData.count == "") {
-      errors.count = "Количество должно быть числом больше нуля";
+      errors.count = "Количество не может быть меньше 0";
     }
 
-    // Валидация отзывов
-    if (editedData.reviews < 0) {
-      errors.reviews = "Количество отзывов должно быть неотрицательным числом";
+    // Валидация количества отзывов отзывов
+    if (editedData.reviews <= 0 || editedData.reviews == "") {
+      errors.reviews = "Количество отзывов не может быть меньше 0";
     }
+    setErrors(errors);
     return errors;
   };
 
@@ -87,9 +89,11 @@ const EditModal = ({ seminar, onClose, onSave }) => {
               name="title"
               value={editedData.title}
               onChange={handleChange}
-              required
+              // required
             />
-            {error.title && <span className="error">{error.title}</span>}
+            {errors.title && (
+              <span className="error-message">{errors.title}</span>
+            )}
           </div>
           <div className="form-group">
             <label>Описание:</label>
@@ -97,8 +101,11 @@ const EditModal = ({ seminar, onClose, onSave }) => {
               name="description"
               value={editedData.description}
               onChange={handleChange}
-              required
+              // required
             />
+            {errors.description && (
+              <span className="error-message">{errors.description}</span>
+            )}
           </div>
           <div className="form-row">
             <div className="form-group">
@@ -108,8 +115,10 @@ const EditModal = ({ seminar, onClose, onSave }) => {
                 name="count"
                 value={editedData.count}
                 onChange={handleChange}
-                required
               />
+              {errors.count && (
+                <span className="error-message">{errors.count}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -119,8 +128,11 @@ const EditModal = ({ seminar, onClose, onSave }) => {
                 name="reviews"
                 value={editedData.reviews}
                 onChange={handleChange}
-                required
+                // required
               />
+              {errors.reviews && (
+                <span className="error-message">{errors.reviews}</span>
+              )}
             </div>
           </div>
 
